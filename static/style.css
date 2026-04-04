@@ -1,0 +1,58 @@
+body {
+    background: #1e1e2f;
+    color: white;
+    font-family: Arial;
+    text-align: center;
+}
+
+h1 {
+    margin: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.video-container {
+    border: 4px solid #00ff88;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.attendance-box {
+    background: #2b2b3d;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+table {
+    width: 300px;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #555;
+    padding: 8px;
+}
+
+th {
+    background: #00ff88;
+    color: black;
+}
+
+button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: darkred;
+}

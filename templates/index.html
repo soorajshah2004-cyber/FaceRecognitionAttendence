@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Attendance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>🎥 Face Recognition Attendance System</h1>
+
+<div class="container">
+
+    <!-- Camera -->
+    <div class="video-container">
+        <img src="{{ url_for('video') }}" width="600">
+    </div>
+
+    <!-- Attendance -->
+    <div class="attendance-box">
+        <h2>📊 Attendance</h2>
+
+        <button onclick="resetAttendance()">Reset</button>
+
+        <table id="attendanceTable">
+            <tr>
+                <th>Name</th>
+                <th>Time</th>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<script>
+function loadAttendance() {
+    fetch('/attendance')
+    .then(res => res.json())
+    .then(data => {
+        let table = document.getElementById("attendanceTable");
+
+        table.innerHTML = `
+            <tr>
+                <th>Name</th>
+                <th>Time</th>
+            </tr>
+        `;
+
+        data.data.forEach(row => {
+            let newRow = table.insertRow();
+            newRow.insertCell(0).innerText = row[0];
+            newRow.insertCell(1).innerText = row[1];
+        });
+    });
+}
+
+// Auto refresh every 2 sec
+setInterval(loadAttendance, 2000);
+
+// Reset button
+function resetAttendance() {
+    fetch('/reset')
+    .then(() => loadAttendance());
+}
+
+// First load
+loadAttendance();
+</script>
+
+</body>
+</html>
