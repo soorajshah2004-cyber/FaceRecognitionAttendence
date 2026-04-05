@@ -7,65 +7,70 @@
 
 <body>
 
-<h1>🎥 Face Recognition Attendance System</h1>
+    <h1>🎥 Face Attendance System</h1>
 
-<div class="container">
+    <div class="container">
 
-    <!-- Camera -->
-    <div class="video-container">
-        <img src="{{ url_for('video') }}" width="600">
+        <!-- Camera -->
+        <div class="video-container">
+            <img src="{{ url_for('video') }}" width="600">
+        </div>
+
+        <!-- Attendance -->
+        <div class="attendance-box">
+            <h2>Attendance</h2>
+
+            <button onclick="resetAttendance()">Reset</button>
+
+            <table id="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Time</th>
+                </tr>
+            </table>
+        </div>
+
     </div>
 
-    <!-- Attendance -->
-    <div class="attendance-box">
-        <h2>📊 Attendance</h2>
+    <script>
+        const table = document.getElementById("table");
 
-        <button onclick="resetAttendance()">Reset</button>
+        function loadAttendance() {
+            fetch('/attendance')
+                .then(res => res.json())
+                .then(data => {
 
-        <table id="attendanceTable">
-            <tr>
-                <th>Name</th>
-                <th>Time</th>
-            </tr>
-        </table>
-    </div>
+                    table.innerHTML = `
+                        <tr>
+                            <th>Name</th>
+                            <th>Time</th>
+                        </tr>
+                    `;
 
-</div>
+                    data.data.forEach(row => {
+                        let tr = document.createElement("tr");
 
-<script>
-function loadAttendance() {
-    fetch('/attendance')
-    .then(res => res.json())
-    .then(data => {
-        let table = document.getElementById("attendanceTable");
+                        let name = document.createElement("td");
+                        name.innerText = row[0];
 
-        table.innerHTML = `
-            <tr>
-                <th>Name</th>
-                <th>Time</th>
-            </tr>
-        `;
+                        let time = document.createElement("td");
+                        time.innerText = row[1];
 
-        data.data.forEach(row => {
-            let newRow = table.insertRow();
-            newRow.insertCell(0).innerText = row[0];
-            newRow.insertCell(1).innerText = row[1];
-        });
-    });
-}
+                        tr.appendChild(name);
+                        tr.appendChild(time);
 
-// Auto refresh every 2 sec
-setInterval(loadAttendance, 2000);
+                        table.appendChild(tr);
+                    });
+                });
+        }
 
-// Reset button
-function resetAttendance() {
-    fetch('/reset')
-    .then(() => loadAttendance());
-}
+        function resetAttendance() {
+            fetch('/reset').then(loadAttendance);
+        }
 
-// First load
-loadAttendance();
-</script>
+        setInterval(loadAttendance, 2000);
+        loadAttendance();
+    </script>
 
 </body>
 </html>
