@@ -11,16 +11,16 @@
 
     <div class="container">
 
-        <!-- Camera -->
+        <!-- Camera Feed -->
         <div class="video-container">
-            <img src="{{ url_for('video') }}" width="600">
+            <img src="{{ url_for('video') }}">
         </div>
 
-        <!-- Attendance -->
+        <!-- Attendance Table -->
         <div class="attendance-box">
-            <h2>Attendance</h2>
+            <h2>📋 Attendance</h2>
 
-            <button onclick="resetAttendance()">Reset</button>
+            <button onclick="resetAttendance()">🗑 Reset Attendance</button>
 
             <table id="table">
                 <tr>
@@ -28,49 +28,13 @@
                     <th>Time</th>
                 </tr>
             </table>
+
+            <p class="empty-msg" id="empty-msg">No attendance recorded yet.</p>
         </div>
 
     </div>
 
-    <script>
-        const table = document.getElementById("table");
-
-        function loadAttendance() {
-            fetch('/attendance')
-                .then(res => res.json())
-                .then(data => {
-
-                    table.innerHTML = `
-                        <tr>
-                            <th>Name</th>
-                            <th>Time</th>
-                        </tr>
-                    `;
-
-                    data.data.forEach(row => {
-                        let tr = document.createElement("tr");
-
-                        let name = document.createElement("td");
-                        name.innerText = row[0];
-
-                        let time = document.createElement("td");
-                        time.innerText = row[1];
-
-                        tr.appendChild(name);
-                        tr.appendChild(time);
-
-                        table.appendChild(tr);
-                    });
-                });
-        }
-
-        function resetAttendance() {
-            fetch('/reset').then(loadAttendance);
-        }
-
-        setInterval(loadAttendance, 2000);
-        loadAttendance();
-    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
